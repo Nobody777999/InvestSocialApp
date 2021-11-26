@@ -1,4 +1,4 @@
-package com.hfad.investsocialapp.screen
+package com.hfad.investsocialapp.screen.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

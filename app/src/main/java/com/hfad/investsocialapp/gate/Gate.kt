@@ -1,8 +1,6 @@
 package com.hfad.investsocialapp.gate
 
-import com.hfad.investsocialapp.screen.LoginViewModel
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
+import com.hfad.investsocialapp.screen.login.LoginViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType

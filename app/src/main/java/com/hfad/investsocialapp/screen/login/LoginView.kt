@@ -1,25 +1,27 @@
 package com.hfad.investsocialapp.screen
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,8 +32,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.hfad.investsocialapp.R
-import java.lang.IllegalStateException
+import com.hfad.investsocialapp.navigation.NavigationItem
+import com.hfad.investsocialapp.screen.login.LoginViewModel
 
+@ExperimentalComposeUiApi
 @Composable
 fun LoginView(loginViewModel: LoginViewModel = viewModel(), navController: NavController) {
 
@@ -41,15 +45,14 @@ fun LoginView(loginViewModel: LoginViewModel = viewModel(), navController: NavCo
 
 
 
-
     Crossfade(targetState = curState.value) { state ->
         when (state) {
             is LoginViewModel.State.Default ->
                 LoginSection(loginViewModel)
-            LoginViewModel.State.Done ->
-//                LoginSection(loginViewModel)
-                LoadingView()
-//                isAuthorize.value = true
+            LoginViewModel.State.Done -> {
+//                loginViewModel.curState.value = LoginViewModel.State.Default
+                isAuthorize.value = true
+            }
             is LoginViewModel.State.Error ->
                 Text(text = state.error)
             LoginViewModel.State.Loading ->
@@ -59,14 +62,18 @@ fun LoginView(loginViewModel: LoginViewModel = viewModel(), navController: NavCo
     }
 
     LaunchedEffect(key1 = curState.value) {
-//        if (isAuthorize.value && curState.value == LoginViewModel.State.Done) {
-//            navController.navigate("")
-//            isAuthorize.value = false
-//        }
+        if (isAuthorize.value && curState.value == LoginViewModel.State.Done) {
+            navController.navigate(NavigationItem.Home.route) {
+                popUpTo(NavigationItem.Login.route)
+                launchSingleTop = true
+            }
+            loginViewModel.curState.value = LoginViewModel.State.Default
+            isAuthorize.value = false
+        }
     }
 
-    LaunchedEffect(key1 = tryAuthorize.value){
-        if(tryAuthorize.value!!){
+    LaunchedEffect(key1 = tryAuthorize.value) {
+        if (tryAuthorize.value!!) {
             loginViewModel.authorize(loginViewModel.user.value!!, loginViewModel.password.value!!)
             loginViewModel.tryAuthorize.value = false
         }
@@ -75,12 +82,18 @@ fun LoginView(loginViewModel: LoginViewModel = viewModel(), navController: NavCo
 
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun LoginSection(loginViewModel: LoginViewModel) {
+
     val user = loginViewModel.user.observeAsState()
     val password = loginViewModel.password.observeAsState()
     val focusManager = LocalFocusManager.current
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -125,7 +138,8 @@ fun LoginSection(loginViewModel: LoginViewModel) {
                     })
                 )
                 OutlinedTextField(
-                    value = password.value!!, onValueChange = { loginViewModel.password.value = it },
+                    value = password.value!!,
+                    onValueChange = { loginViewModel.password.value = it },
                     label = { Text(text = "Пароль") },
                     placeholder = { Text(text = "Пароль") },
                     singleLine = true,
@@ -139,7 +153,10 @@ fun LoginSection(loginViewModel: LoginViewModel) {
                     })
                 )
                 Spacer(Modifier.padding(4.dp))
-                Row( modifier = Modifier.fillMaxWidth(0.8f), horizontalArrangement = Arrangement.Center) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     Button(onClick = {
                         loginViewModel.tryAuthorize.value = true
                     }) {
