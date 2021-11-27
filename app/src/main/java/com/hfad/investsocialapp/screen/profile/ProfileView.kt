@@ -30,25 +30,22 @@ fun ProfileView(navController: NavController, ProfileViewModelViewModel: Profile
     ) {
 
 
-
-
-
-
+        ProfileCard()
 
 
     }
 
 }
+
 @Composable
-fun ColumnItem() {
+fun ProfileCard() {
     Column(
         modifier = Modifier
 
             .fillMaxWidth()
             .fillMaxHeight()
             .height(30.dp)
-            .background(Color.White)
-            .border(1.dp, Color.Blue),
+            .background(Color.White),
         verticalArrangement = Arrangement.Top,
 
 
@@ -94,15 +91,15 @@ fun ColumnItem() {
                 }
             }
         }
-        Row(
-            modifier = Modifier
-                .background(Color.Red)
-                .fillMaxWidth()
-                .fillMaxHeight()
-        ) {
-
-postStructure()
-        }
+//        Row(
+//            modifier = Modifier
+//                .background(Color.Red)
+//                .fillMaxWidth()
+//                .fillMaxHeight()
+//        ) {
+//
+//            postStructure()
+//        }
 
     }
 }
@@ -151,8 +148,9 @@ fun postStructure() {
         }
     }
 }
+
 @Preview
 @Composable
-fun showColumnItem(){
-    ColumnItem()
+fun showColumnItem() {
+    ProfileCard()
 }
