@@ -1,6 +1,7 @@
 package com.hfad.investsocialapp.gate
 
 import com.hfad.investsocialapp.screen.login.LoginViewModel
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -12,43 +13,46 @@ class Gate {
     val format = Json {
         ignoreUnknownKeys = true
     }
+
+    val url = "http://161.35.221.241"
     val okHttpClient = OkHttpClient()
     val mediaType = "application/json".toMediaType()
 
     fun authorize(user: String, pass: String): LoginViewModel.State{
-        val body = format.encodeToString(mapOf("user" to user, "pass" to pass)).toRequestBody(mediaType)
+        val body = format.encodeToString(mapOf("username" to user, "password" to pass)).toRequestBody(mediaType)
 
-        return LoginViewModel.State.Done
+//        return LoginViewModel.State.Done
 
-//        val request = Request.Builder()
-//            .url("lalal/lalal")
+
+        val request = Request.Builder()
+            .url("$url/login?username=$user&password=$pass")
 //            .post(body)
-//            .build()
-//
-//        val response = okHttpClient.newCall(request).execute()
-//
-//        return if(response.isSuccessful){
-//            if (response.body != null){
-//                val r = response.body!!.string()
-//                if (r == "ок"){
-//                    LoginViewModel.State.Done
-//                }else{
-//                    LoginViewModel.State.Error("Пользователь не существует")
-//                }
-//            }else{
-//                LoginViewModel.State.Error("Ошибка связи")
-//            }
-//
-//        }else{
-//            LoginViewModel.State.Error("Ошибка связи")
-//        }
+            .build()
+
+        val response = okHttpClient.newCall(request).execute()
+
+        return if(response.isSuccessful){
+            if (response.body != null){
+                val r = format.decodeFromString<HashMap<String, String>>(response.body!!.string())
+                if (r["status"] == "ok"){
+                    LoginViewModel.State.Done
+                }else{
+                    LoginViewModel.State.Error("Пользователь не существует")
+                }
+            }else{
+                LoginViewModel.State.Error("Ошибка связи")
+            }
+
+        }else{
+            LoginViewModel.State.Error("Ошибка связи")
+        }
     }
 
     fun createNewUser(user: String, pass: String): LoginViewModel.State{
         val body = format.encodeToString(mapOf("user" to user, "pass" to pass)).toRequestBody(mediaType)
 
         val request = Request.Builder()
-            .url("lalal/lalal")
+            .url(url)
             .post(body)
             .build()
 

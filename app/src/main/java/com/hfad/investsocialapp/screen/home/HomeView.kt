@@ -1,6 +1,9 @@
 package com.hfad.investsocialapp.screen.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
@@ -12,15 +15,28 @@ import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActionScope
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import coil.compose.rememberImagePainter
 import coil.transform.RoundedCornersTransformation
+import com.hfad.investsocialapp.data.Post
+import com.hfad.investsocialapp.navigation.NavigationItem
 import com.hfad.investsocialapp.screen.profile.ProfileViewModel
+import com.hfad.investsocialapp.ui.theme.Purple500
 
 
 @Composable
@@ -77,10 +93,14 @@ fun HomeView(navController: NavController, homeViewModel: HomeViewModel, profile
 
         }
 
-        for (i in 1..5) {
+        profileViewModel.posts.forEach {
             item {
-                PostCard(post = profileViewModel.posts.first(), viewModel = profileViewModel, progress = progress, navController = navController)
+                PostCard(post = it, viewModel = profileViewModel, progress = progress, navController = navController)
             }
+        }
+        
+        item{
+            Spacer(modifier = Modifier.padding(bottom = 24.dp))
         }
     }
 
