@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 
 
 @Composable
@@ -64,4 +65,10 @@ fun ColumnItem() {
     ) {
         Text(text = "Здесь будет пост", color = Color.Blue)
     }
+}
+
+@Preview
+@Composable
+fun showColumnItem(){
+    ColumnItem()
 }

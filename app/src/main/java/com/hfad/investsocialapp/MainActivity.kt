@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -30,71 +31,85 @@ import com.hfad.investsocialapp.ui.theme.InvestSocialAppTheme
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
 
-    val loginViewModel: LoginViewModel by viewModels()
-    val homeViewModel: HomeViewModel by viewModels()
-    val createRecordViewModel: CreateNewRecordViewModel by viewModels()
-    val profileViewModel: ProfileViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val isLogin = remember { mutableStateOf(false) }
-            val navController = rememberNavController()
-            InvestSocialAppTheme {
-                Scaffold(
-                    floatingActionButton = {
-                        if (isLogin.value) {
-                            FloatingActionButton(onClick = { navController.navigate(NavigationItem.CreateRecord.route){
+            SignalApp()
+        }
+    }
+
+    @Composable
+    private fun SignalApp() {
+        val loginViewModel: LoginViewModel by viewModels()
+        val homeViewModel: HomeViewModel by viewModels()
+        val createRecordViewModel: CreateNewRecordViewModel by viewModels()
+        val profileViewModel: ProfileViewModel by viewModels()
+
+        val isLogin = remember { mutableStateOf(false) }
+        val navController = rememberNavController()
+        InvestSocialAppTheme {
+            Scaffold(
+                floatingActionButton = {
+                    if (isLogin.value) {
+                        FloatingActionButton(onClick = {
+                            navController.navigate(NavigationItem.CreateRecord.route) {
                                 launchSingleTop = true
-                            } }) {
-                                Icon(Icons.Filled.Add, contentDescription = "Создать новую")
-
                             }
-                        }
-                    },
-                    isFloatingActionButtonDocked = true,
-                    floatingActionButtonPosition = FabPosition.Center,
+                        }) {
+                            Icon(Icons.Filled.Add, contentDescription = "Создать новую")
 
-                    bottomBar = {
-                        if (isLogin.value) {
-                            BottomAppBar(
-
-                                cutoutShape = MaterialTheme.shapes.small.copy(
-                                    CornerSize(percent = 50)
-                                )
-                            ) {
-                            }
                         }
                     }
-                ) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = NavigationItem.Login.route
-                    ) {
-                        composable(NavigationItem.Home.route) {
-                            HomeView(navController, homeViewModel)
-                        }
-                        composable(NavigationItem.Login.route) {
-                            LoginView(
-                                navController = navController,
-                                loginViewModel = loginViewModel,
-                                isLogin = isLogin
+                },
+                isFloatingActionButtonDocked = true,
+                floatingActionButtonPosition = FabPosition.Center,
+
+                bottomBar = {
+                    if (isLogin.value) {
+                        BottomAppBar(
+
+                            cutoutShape = MaterialTheme.shapes.small.copy(
+                                CornerSize(percent = 50)
                             )
+                        ) {
                         }
-                        composable(NavigationItem.CreateRecord.route) {
-                            CreateNewRecordView(navController = navController, createNewRecordViewModel = createRecordViewModel)
-                        }
-                        composable(NavigationItem.Profile.route) {
-                            ProfileView(navController, profileViewModel)
-                        }
-
-
                     }
+                }
+            ) {
+                NavHost(
+                    navController = navController,
+                    startDestination = NavigationItem.Login.route
+                ) {
+                    composable(NavigationItem.Home.route) {
+                        HomeView(navController, homeViewModel)
+                    }
+                    composable(NavigationItem.Login.route) {
+                        LoginView(
+                            navController = navController,
+                            loginViewModel = loginViewModel,
+                            isLogin = isLogin
+                        )
+                    }
+                    composable(NavigationItem.CreateRecord.route) {
+                        CreateNewRecordView(
+                            navController = navController,
+                            createNewRecordViewModel = createRecordViewModel
+                        )
+                    }
+                    composable(NavigationItem.Profile.route) {
+                        ProfileView(navController, profileViewModel)
+                    }
+
+
                 }
             }
         }
     }
 }
+
+
 
 
 
