@@ -166,7 +166,7 @@ fun PostCard(post: Post, viewModel: ProfileViewModel, modifier: Modifier = Modif
 
 
             Image(
-                rememberImagePainter(data = post.owner.picture) {
+                rememberImagePainter(data = post.image) {
                     placeholder(progress)
                 },
                 contentDescription = null,
