@@ -93,7 +93,7 @@ fun HomeView(navController: NavController, homeViewModel: HomeViewModel, profile
 
         }
 
-        profileViewModel.posts.forEach {
+        homeViewModel.posts.forEach {
             item {
                 PostCard(post = it, viewModel = profileViewModel, progress = progress, navController = navController)
             }

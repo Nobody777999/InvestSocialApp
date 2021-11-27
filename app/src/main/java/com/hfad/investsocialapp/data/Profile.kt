@@ -1,13 +1,17 @@
 package com.hfad.investsocialapp.data
 
-data class Profile(
+import kotlinx.serialization.Serializable
 
-    val id: String,
-    val firstName: String,
-    val lastName: String,
-    val picture: String,
-    val following: Int,
-    val followers: Int,
-    val text: String,
-    val posts: List<Post>
+
+@Serializable
+data class Profile(
+    val id: Int,
+    val first_name: String,
+    val last_name: String,
+    val avatar: String,
+//    val following: Int,
+//    val followers: Int,
+//    val text: String,
+    val honor: Int = 2,
+//    val posts: List<Post>
 )

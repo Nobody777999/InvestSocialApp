@@ -1,9 +1,11 @@
 package com.hfad.investsocialapp.screen.home
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -12,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -21,16 +22,21 @@ import coil.transform.RoundedCornersTransformation
 import com.hfad.investsocialapp.data.Post
 import com.hfad.investsocialapp.navigation.NavigationItem
 import com.hfad.investsocialapp.screen.profile.ProfileViewModel
-import com.hfad.investsocialapp.screen.profile.postStructure
 
 @Composable
-fun PostCard(post: Post, viewModel: ProfileViewModel, modifier: Modifier = Modifier, progress: CircularProgressDrawable, navController: NavController) {
+fun PostCard(
+    post: Post,
+    viewModel: ProfileViewModel,
+    modifier: Modifier = Modifier,
+    progress: CircularProgressDrawable,
+    navController: NavController
+) {
     Card(
         modifier = Modifier
             .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 8.dp)
             .clickable(onClick = {
                 navController.navigate(NavigationItem.Profile.route) {
-                    viewModel.idUser.value = post.owner.id
+                    viewModel.idUser.value = post.owner
                     launchSingleTop = true
                 }
             }),
@@ -51,7 +57,7 @@ fun PostCard(post: Post, viewModel: ProfileViewModel, modifier: Modifier = Modif
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    rememberImagePainter(data = post.owner.picture) {
+                    rememberImagePainter(data = post.avatar) {
                         transformations(RoundedCornersTransformation(40f))
                         placeholder(progress)
                     },
@@ -65,10 +71,10 @@ fun PostCard(post: Post, viewModel: ProfileViewModel, modifier: Modifier = Modif
 
                 Column(modifier = Modifier.padding(start = 10.dp, top = 10.dp)) {
                     Text(
-                        text = post.owner.lastName + " " + post.owner.firstName,
+                        text = post.name,
                     )
                     Text(
-                        text = post.date,
+                        text = "Репутация: " + post.honor,
                         style = MaterialTheme.typography.caption
                     )
                 }
@@ -105,22 +111,37 @@ fun PostCard(post: Post, viewModel: ProfileViewModel, modifier: Modifier = Modif
             )
             Row(modifier = Modifier.padding(top = 12.dp)) {
                 Text(
-                    text = "Понравилось ${post.likes.toString()}",
+                    text = "Понравилось ${post.likes}",
                     style = MaterialTheme.typography.caption,
                     modifier = Modifier
                         .weight(1f)
                         .padding(start = 4.dp)
                         .wrapContentWidth(Alignment.Start)
                 )
+            }
+            Row(modifier = Modifier.padding(top = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "Комментарии ${post.likes.toString()}",
+                    text = "Не понравилось ${post.dislikes}",
                     style = MaterialTheme.typography.caption,
                     modifier = Modifier
                         .weight(1f)
                         .padding(start = 4.dp)
-                        .wrapContentWidth(Alignment.End)
+                        .wrapContentWidth(Alignment.Start)
                 )
+                Button(onClick = { /*TODO*/ }, modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 4.dp)
+                    .wrapContentWidth(Alignment.End)) {
+                    Text(
+                        text = "Комментарии ${post.comments}",
+                        style = MaterialTheme.typography.caption,
+
+
+                    )
+                }
+
             }
+
         }
     }
 }

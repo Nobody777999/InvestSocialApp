@@ -50,7 +50,7 @@ fun LoginView(
         when (state) {
             is LoginViewModel.State.Default ->
                 LoginSection(loginViewModel)
-            LoginViewModel.State.Done -> {
+            is LoginViewModel.State.Done -> {
 //                loginViewModel.curState.value = LoginViewModel.State.Default
                 isAuthorize.value = true
                 isLogin.value = true
@@ -66,9 +66,9 @@ fun LoginView(
     }
 
     LaunchedEffect(key1 = curState.value) {
-        if (isAuthorize.value && curState.value == LoginViewModel.State.Done) {
+        if (isAuthorize.value && curState.value is LoginViewModel.State.Done) {
             navController.navigate(NavigationItem.Home.route) {
-                popUpTo(NavigationItem.Login.route){
+                popUpTo(NavigationItem.Login.route) {
                     inclusive = true
                 }
                 launchSingleTop = true
@@ -121,6 +121,11 @@ fun LoginSection(loginViewModel: LoginViewModel) {
                 .padding(10.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "logo",
+                alignment = Alignment.TopCenter
+            )
 
 
             Text(

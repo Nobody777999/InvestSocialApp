@@ -32,8 +32,7 @@ fun SearchView(state: MutableState<String>, onCLick: KeyboardActionScope.() -> U
             state.value = value
         },
         modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp),
+            .fillMaxWidth(),
         textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
         leadingIcon = {
             Icon(

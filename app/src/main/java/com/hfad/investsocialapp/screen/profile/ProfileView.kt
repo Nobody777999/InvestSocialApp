@@ -2,111 +2,217 @@ package com.hfad.investsocialapp.screen.profile
 
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.widget.Space
+import android.widget.Toast
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.res.ResourcesCompat
+import androidx.datastore.dataStore
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavController
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import coil.compose.rememberImagePainter
 import com.hfad.investsocialapp.R
+import com.hfad.investsocialapp.data.Profile
+import com.hfad.investsocialapp.screen.LoadingView
+import com.hfad.investsocialapp.screen.home.HomeViewModel
+import com.hfad.investsocialapp.screen.home.PostCard
 
 @ExperimentalComposeUiApi
 @Composable
-fun ProfileView(navController: NavController, ProfileViewModelViewModel: ProfileViewModel) {
+fun ProfileView(
+    navController: NavController,
+    profileViewModel: ProfileViewModel,
+    homeViewModel: HomeViewModel
+) {
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize(), contentAlignment = Alignment.TopStart
-    ) {
+    val curState = profileViewModel.curState.observeAsState()
+    val idProfile = profileViewModel.idUser.observeAsState()
+    val curProfile = profileViewModel.curProfile.observeAsState()
 
 
-        ProfileCard()
 
+
+    Crossfade(targetState = curState.value) { state ->
+        when (state) {
+            is ProfileViewModel.State.Data ->
+                ProfileCard(state.data, profileViewModel, navController, homeViewModel)
+            is ProfileViewModel.State.Error -> Text(text = state.error)
+            ProfileViewModel.State.Loading -> LoadingView()
+            null -> Text(text = "Нет информации")
+        }
 
     }
+
+    LaunchedEffect(key1 = idProfile.value) {
+        if (idProfile.value!!.isEmpty()) {
+            profileViewModel.setCurProfile()
+        } else {
+            profileViewModel.getProfileById(idProfile.value ?: "1")
+        }
+    }
+
+
+//    Box(
+//        modifier = Modifier
+//            .fillMaxSize(), contentAlignment = Alignment.TopStart
+//    ) {
+//
+//
+//
+//
+//
+//    }
 
 }
 
 @Composable
-fun ProfileCard() {
+fun ProfileCard(
+    profile: Profile,
+    profileViewModel: ProfileViewModel,
+    navController: NavController,
+    homeViewModel: HomeViewModel,
+) {
+    val context = LocalContext.current
+    val curProfile = profileViewModel.curProfile.observeAsState()
+    val progress = CircularProgressDrawable(LocalContext.current)
+    val buttonText = remember { mutableStateOf("Подписаться") }
+    progress.start()
     Column(
         modifier = Modifier
 
             .fillMaxWidth()
             .fillMaxHeight()
-            .height(30.dp)
             .background(Color.White),
-        verticalArrangement = Arrangement.Top,
+//        verticalArrangement = Arrangement.Top,
 
-
-        ) {
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(Color.White),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
 
         ) {
-            Column(horizontalAlignment = Alignment.Start)
-            {
-                Image(
-                    painterResource(R.drawable.photo),
-                    contentDescription = "profile_photo",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .width(60.dp)
-                        .height(60.dp)
-                        .clip(CircleShape)
-                )
-            }
 
-            Column() {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    text = "Name",
-                    fontSize = 30.sp,
-                )
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    fontSize = 20.sp,
-                    text = "Rating"
-                )
-                Row(horizontalArrangement = Arrangement.End) {
-                    Button(onClick = { /*TODO*/ }) {
-                        Text(text = "Подписаться")
-                    }
+            Image(
+                rememberImagePainter(data = profile.avatar),
+                contentDescription = "profile_photo",
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(60.dp)
+                    .height(60.dp)
+                    .clip(CircleShape)
+            )
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                text = profile.first_name + " " + profile.last_name,
+                fontSize = 30.sp,
+            )
+        }
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            fontSize = 20.sp,
+            text = "Репутация: ${profile.honor}"
+        )
+
+        if (!curProfile.value!!){
+            Button(onClick = {
+                if (buttonText.value == "Подписаться") {
+                    Toast.makeText(
+                        context,
+                        "Вы успешно подписались",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    buttonText.value = "Отписаться"
+                } else if (buttonText.value == "Отписаться") {
+                    Toast.makeText(
+                        context,
+                        "Вы успешно отписались",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    buttonText.value = "Подписаться"
                 }
+            },
+                modifier = Modifier.padding(8.dp)) {
+                Text(text = buttonText.value)
+            }
+        }else{
+            Button(onClick = {
+
+            },
+                modifier = Modifier.padding(8.dp)) {
+                Text(text = "Обучение")
             }
         }
-        Row(
-           modifier = Modifier
-               .background(Color.Red)
-               .fillMaxWidth()
-               .fillMaxHeight()
-    ) {
 
-           postStructure()
-       }
 
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        if (homeViewModel.posts.isNotEmpty()) {
+            LazyColumn {
+                item {
+                    Text(
+                        text = "Посты пользователя",
+                        fontSize = 30.sp,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                item { Spacer(modifier = Modifier.padding(8.dp)) }
+                homeViewModel.posts.forEach {
+                    item {
+                        PostCard(
+                            post = it,
+                            viewModel = profileViewModel,
+                            progress = progress,
+                            navController = navController
+                        )
+                    }
+
+
+                }
+                item { Spacer(modifier = Modifier.padding(36.dp)) }
+            }
+        }
+
+
+//        }
+
+    }
+
+    DisposableEffect(key1 = curProfile.value){
+
+        onDispose { profileViewModel.curProfile.value = false }
     }
 }
 
@@ -135,19 +241,18 @@ fun postStructure() {
             ) {
 
                 Image(
-                painterResource(R.drawable.logo),
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(8.dp)
-                    .width(400.dp)
-                    .height(400.dp)
-                    .clip(RectangleShape)
-            )
+                    painterResource(R.drawable.logo),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(400.dp)
+                        .height(400.dp)
+                        .clip(RectangleShape)
+                )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
-            ){
-Text(text = "dgdfg", style = MaterialTheme.typography.body1)
+            ) {
             }
 
         }
@@ -175,8 +280,3 @@ Text(text = "dgdfg", style = MaterialTheme.typography.body1)
     }
 }
 
-@Preview
-@Composable
-fun showColumnItem() {
-    ProfileCard()
-}

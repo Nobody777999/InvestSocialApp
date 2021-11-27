@@ -1,5 +1,6 @@
 package com.hfad.investsocialapp
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -37,8 +38,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 
+
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "Signal")
 
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
@@ -75,18 +81,29 @@ class MainActivity : ComponentActivity() {
         val createRecordViewModel: CreateNewRecordViewModel by viewModels()
         val profileViewModel: ProfileViewModel by viewModels()
 
-        val isLogin = remember { mutableStateOf(false) }
+        loginViewModel.dataStore = applicationContext.dataStore
+        homeViewModel.dataStore = applicationContext.dataStore
+        createRecordViewModel.dataStore = applicationContext.dataStore
+        profileViewModel.dataStore = applicationContext.dataStore
         val navController = rememberNavController()
+        val fabIcon = remember {
+            mutableStateOf(Icons.Default.Add)
+        }
+        val fabClick = remember{ mutableStateOf({
+            navController.navigate(NavigationItem.CreateRecord.route) {
+                launchSingleTop = true
+            }
+        })}
+
+        val isLogin = remember { mutableStateOf(false) }
+
         InvestSocialAppTheme {
             Scaffold(
                 floatingActionButton = {
                     if (isLogin.value) {
-                        FloatingActionButton(onClick = {
-                            navController.navigate(NavigationItem.CreateRecord.route) {
-                                launchSingleTop = true
-                            }
-                        }) {
-                            Icon(Icons.Filled.Add, contentDescription = "Создать новую")
+                        FloatingActionButton(onClick = fabClick.value
+                        ) {
+                            Icon(fabIcon.value, contentDescription = "Создать новую")
 
                         }
                     }
@@ -116,6 +133,7 @@ class MainActivity : ComponentActivity() {
                             }
                             Spacer(Modifier.weight(0.5f, true))
                             IconButton(onClick = {
+                                profileViewModel.curProfile.value = true
                                 navController.navigate(NavigationItem.Profile.route) {
                                     launchSingleTop = true
                                 }
@@ -146,11 +164,13 @@ class MainActivity : ComponentActivity() {
                     composable(NavigationItem.CreateRecord.route) {
                         CreateNewRecordView(
                             navController = navController,
-                            createNewRecordViewModel = createRecordViewModel
+                            createNewRecordViewModel = createRecordViewModel,
+                            fabIcon,
+                            fabClick
                         )
                     }
                     composable(NavigationItem.Profile.route) {
-                        ProfileView(navController, profileViewModel)
+                        ProfileView(navController, profileViewModel, homeViewModel)
                     }
                 }
             }
