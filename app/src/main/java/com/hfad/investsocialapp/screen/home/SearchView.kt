@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hfad.investsocialapp.ui.theme.Purple500
 
-// внести в отд файл
+// функция отображения поисковой строки
 @Composable
 fun SearchView(state: MutableState<String>, onCLick: KeyboardActionScope.() -> Unit) {
     TextField(
