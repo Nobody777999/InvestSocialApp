@@ -134,7 +134,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = NavigationItem.Login.route
                 ) {
                     composable(NavigationItem.Home.route) {
-                        HomeView(navController, homeViewModel)
+                        HomeView(navController, homeViewModel, profileViewModel)
                     }
                     composable(NavigationItem.Login.route) {
                         LoginView(
