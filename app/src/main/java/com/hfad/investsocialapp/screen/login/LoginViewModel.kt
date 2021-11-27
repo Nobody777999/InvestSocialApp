@@ -15,7 +15,7 @@ class LoginViewModel: ViewModel() {
     val curState = MutableLiveData<State>(State.Default)
     val tryAuthorize = MutableLiveData(false)
     private val gate = Gate()
-
+        // состояния
     sealed class State(){
         object Default: State()
         object Loading: State()

@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
 
     }
 
-
+    // точка входа в приложение
     @Composable
     private fun SignalApp() {
         val loginViewModel: LoginViewModel by viewModels()
@@ -77,6 +77,7 @@ class MainActivity : ComponentActivity() {
 
         val isLogin = remember { mutableStateOf(false) }
         val navController = rememberNavController()
+    // навигационное меню
         InvestSocialAppTheme {
             Scaffold(
                 floatingActionButton = {
@@ -129,6 +130,8 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             ) {
+
+            // переходы к viewModels
                 NavHost(
                     navController = navController,
                     startDestination = NavigationItem.Login.route

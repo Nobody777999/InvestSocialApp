@@ -12,7 +12,7 @@ class ProfileViewModel : ViewModel() {
     val idUser = MutableLiveData<String>("")
 
     val posts = mutableListOf(
-        // 5 разных постов
+        // Хардкод-посты для проверки
         Post(
             "1",
             "https://cdn.pixabay.com/photo/2014/07/06/13/55/calculator-385506__340.jpg",

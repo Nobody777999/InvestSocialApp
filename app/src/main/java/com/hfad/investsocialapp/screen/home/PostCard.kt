@@ -24,6 +24,8 @@ import com.hfad.investsocialapp.screen.profile.ProfileViewModel
 import com.hfad.investsocialapp.screen.profile.postStructure
 
 @Composable
+
+// разметка поста
 fun PostCard(post: Post, viewModel: ProfileViewModel, modifier: Modifier = Modifier, progress: CircularProgressDrawable, navController: NavController) {
     Card(
         modifier = Modifier

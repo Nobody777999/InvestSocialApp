@@ -11,7 +11,7 @@ import androidx.navigation.NavController
 
 @ExperimentalComposeUiApi
 @Composable
-
+// функция создания новой записи на стену
 fun CreateNewRecordView(navController: NavController, createNewRecordViewModel: CreateNewRecordViewModel){
     Box( modifier = Modifier
         .fillMaxSize(),

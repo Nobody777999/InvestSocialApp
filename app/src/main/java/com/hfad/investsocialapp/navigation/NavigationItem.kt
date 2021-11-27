@@ -1,6 +1,7 @@
 package com.hfad.investsocialapp.navigation
 
 sealed class NavigationItem(var route: String) {
+    // объектры основных пакетов приложения
     object Home : NavigationItem("home")
     object Profile : NavigationItem("profile")
     object Login : NavigationItem("login")

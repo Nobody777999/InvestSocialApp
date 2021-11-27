@@ -28,6 +28,7 @@ import com.hfad.investsocialapp.R
 
 @ExperimentalComposeUiApi
 @Composable
+// отображение профиля
 fun ProfileView(navController: NavController, ProfileViewModelViewModel: ProfileViewModel) {
 
     Box(
@@ -42,7 +43,7 @@ fun ProfileView(navController: NavController, ProfileViewModelViewModel: Profile
     }
 
 }
-
+// отрисовка профиля
 @Composable
 fun ProfileCard() {
     Column(
@@ -110,7 +111,7 @@ fun ProfileCard() {
     }
 }
 
-//функция должна принимать имя и рейтинг для отображения fun postStructure(String Name, Int Rating){
+// структура публикации
 @Composable
 fun postStructure() {
     Row(
@@ -174,7 +175,7 @@ Text(text = "dgdfg", style = MaterialTheme.typography.body1)
 //        }
     }
 }
-
+// превью для тестирования
 @Preview
 @Composable
 fun showColumnItem() {

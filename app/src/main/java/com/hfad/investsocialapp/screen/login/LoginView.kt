@@ -34,6 +34,8 @@ import com.hfad.investsocialapp.screen.login.LoginViewModel
 
 @ExperimentalComposeUiApi
 @Composable
+
+// авторизация
 fun LoginView(
     loginViewModel: LoginViewModel = viewModel(),
     navController: NavController,

@@ -38,7 +38,7 @@ import com.hfad.investsocialapp.navigation.NavigationItem
 import com.hfad.investsocialapp.screen.profile.ProfileViewModel
 import com.hfad.investsocialapp.ui.theme.Purple500
 
-
+// параметры для поисковой строки
 @Composable
 fun HomeView(navController: NavController, homeViewModel: HomeViewModel, profileViewModel: ProfileViewModel) {
 
@@ -55,7 +55,7 @@ fun HomeView(navController: NavController, homeViewModel: HomeViewModel, profile
     val focusManager = LocalFocusManager.current
     val progress = CircularProgressDrawable(LocalContext.current)
     progress.start()
-
+//Лента с прокруткой
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -92,7 +92,7 @@ fun HomeView(navController: NavController, homeViewModel: HomeViewModel, profile
             }
 
         }
-
+        // Основная лента новостей
         profileViewModel.posts.forEach {
             item {
                 PostCard(post = it, viewModel = profileViewModel, progress = progress, navController = navController)
@@ -103,7 +103,7 @@ fun HomeView(navController: NavController, homeViewModel: HomeViewModel, profile
             Spacer(modifier = Modifier.padding(bottom = 24.dp))
         }
     }
-
+        // остановка прокрутки перед выходом
     DisposableEffect(key1 = progress) {
         onDispose {
             progress.stop()
