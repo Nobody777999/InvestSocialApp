@@ -9,11 +9,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -37,12 +34,16 @@ import com.hfad.investsocialapp.screen.login.LoginViewModel
 
 @ExperimentalComposeUiApi
 @Composable
-fun LoginView(loginViewModel: LoginViewModel = viewModel(), navController: NavController) {
+fun LoginView(
+    loginViewModel: LoginViewModel = viewModel(),
+    navController: NavController,
+    isLogin: MutableState<Boolean>
+) {
 
     val curState = loginViewModel.curState.observeAsState()
     val isAuthorize = remember { mutableStateOf(false) }
     val tryAuthorize = loginViewModel.tryAuthorize.observeAsState()
-
+    isLogin.value = false
 
 
     Crossfade(targetState = curState.value) { state ->
@@ -52,6 +53,9 @@ fun LoginView(loginViewModel: LoginViewModel = viewModel(), navController: NavCo
             LoginViewModel.State.Done -> {
 //                loginViewModel.curState.value = LoginViewModel.State.Default
                 isAuthorize.value = true
+                isLogin.value = true
+
+
             }
             is LoginViewModel.State.Error ->
                 Text(text = state.error)
@@ -64,7 +68,9 @@ fun LoginView(loginViewModel: LoginViewModel = viewModel(), navController: NavCo
     LaunchedEffect(key1 = curState.value) {
         if (isAuthorize.value && curState.value == LoginViewModel.State.Done) {
             navController.navigate(NavigationItem.Home.route) {
-                popUpTo(NavigationItem.Login.route)
+                popUpTo(NavigationItem.Login.route){
+                    inclusive = true
+                }
                 launchSingleTop = true
             }
             loginViewModel.curState.value = LoginViewModel.State.Default
@@ -94,22 +100,22 @@ fun LoginSection(loginViewModel: LoginViewModel) {
             .fillMaxSize(),
         contentAlignment = Alignment.BottomCenter
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 30.dp)
-                .background(Color.White),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            Image(painterResource(R.drawable.logo), contentDescription = "logo")
-
-        }
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(top = 30.dp)
+//                .background(Color.White),
+//            contentAlignment = Alignment.TopCenter
+//        ) {
+//            Image(painterResource(R.drawable.logo), contentDescription = "logo")
+//
+//        }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.6f)
+                .fillMaxHeight()
                 .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
                 .background(Color.White)
                 .padding(10.dp)

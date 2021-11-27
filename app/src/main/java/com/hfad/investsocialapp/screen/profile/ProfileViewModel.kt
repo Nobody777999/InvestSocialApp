@@ -1,4 +1,4 @@
-package com.hfad.investsocialapp.screen.Profile
+package com.hfad.investsocialapp.screen.profile
 
 import androidx.lifecycle.ViewModel
 
