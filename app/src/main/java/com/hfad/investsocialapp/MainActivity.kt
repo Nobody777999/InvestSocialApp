@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
@@ -31,14 +30,18 @@ import com.hfad.investsocialapp.screen.home.HomeViewModel
 import com.hfad.investsocialapp.screen.login.LoginViewModel
 import com.hfad.investsocialapp.ui.theme.InvestSocialAppTheme
 import android.widget.Toast
-
-
-
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 
 
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +66,6 @@ class MainActivity : ComponentActivity() {
 
 
     }
-
 
 
     @Composable
@@ -98,8 +100,31 @@ class MainActivity : ComponentActivity() {
 
                             cutoutShape = MaterialTheme.shapes.small.copy(
                                 CornerSize(percent = 50)
-                            )
+                            ),
+
+                            contentPadding = PaddingValues(horizontal = 50.dp)
                         ) {
+                            IconButton(onClick = {
+                                navController.navigate(NavigationItem.Home.route) {
+                                    launchSingleTop = true
+                                }
+                            }) {
+                                Icon(
+                                    Icons.Filled.Home,
+                                    contentDescription = "Localized description",
+                                )
+                            }
+                            Spacer(Modifier.weight(0.5f, true))
+                            IconButton(onClick = {
+                                navController.navigate(NavigationItem.Profile.route) {
+                                    launchSingleTop = true
+                                }
+                            }) {
+                                Icon(
+                                    Icons.Filled.Person,
+                                    contentDescription = "Localized description",
+                                )
+                            }
                         }
                     }
                 }
@@ -127,8 +152,6 @@ class MainActivity : ComponentActivity() {
                     composable(NavigationItem.Profile.route) {
                         ProfileView(navController, profileViewModel)
                     }
-
-
                 }
             }
         }
