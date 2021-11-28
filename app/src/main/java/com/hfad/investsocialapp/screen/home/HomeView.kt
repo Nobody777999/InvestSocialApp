@@ -87,7 +87,7 @@ fun HomeView(
 
         }
         // Основная лента новостей
-        homeViewModel.posts.forEach {
+        homeViewModel.posts.filter { e -> e.categories.any{it.contains(searchText.value, ignoreCase = true)} }.forEach {
             item {
                 PostCard(
                     post = it,
