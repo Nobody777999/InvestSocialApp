@@ -2,7 +2,7 @@ package com.hfad.investsocialapp.data
 
 import kotlinx.serialization.Serializable
 
-
+// параматры для профиля
 @Serializable
 data class Profile(
     val id: Int,

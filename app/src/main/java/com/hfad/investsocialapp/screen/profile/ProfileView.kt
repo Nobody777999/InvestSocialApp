@@ -1,8 +1,10 @@
 package com.hfad.investsocialapp.screen.profile
 
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Icon
 import android.net.Uri
 import android.widget.Space
+import androidx.compose.material.*
 import android.widget.Toast
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
@@ -11,15 +13,19 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
@@ -33,16 +39,19 @@ import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavController
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import androidx.ui.input.ImeAction
 import coil.compose.rememberImagePainter
 import com.hfad.investsocialapp.R
 import com.hfad.investsocialapp.data.Profile
 import com.hfad.investsocialapp.screen.LoadingView
+import com.hfad.investsocialapp.screen.create_record.ShowDialog
 import com.hfad.investsocialapp.screen.home.HomeViewModel
 import com.hfad.investsocialapp.screen.home.PostCard
 
 @ExperimentalComposeUiApi
 @Composable
 fun ProfileView(
+
     navController: NavController,
     profileViewModel: ProfileViewModel,
     homeViewModel: HomeViewModel
@@ -95,10 +104,14 @@ fun ProfileCard(
     navController: NavController,
     homeViewModel: HomeViewModel,
 ) {
+
+    var showDialog = remember{mutableStateOf(false)}
     val context = LocalContext.current
     val curProfile = profileViewModel.curProfile.observeAsState()
     val progress = CircularProgressDrawable(LocalContext.current)
     val buttonText = remember { mutableStateOf("Подписаться") }
+
+
     progress.start()
     Column(
         modifier = Modifier
@@ -167,6 +180,8 @@ fun ProfileCard(
             }
         }else{
             Button(onClick = {
+                showDialog.value = true
+
 
             },
                 modifier = Modifier.padding(8.dp)) {
@@ -213,9 +228,40 @@ fun ProfileCard(
     DisposableEffect(key1 = curProfile.value){
 
         onDispose { profileViewModel.curProfile.value = false }
-    }
-}
 
+    }
+
+    if (showDialog.value) {
+        ShowDialog(show = showDialog)
+    }
+
+//    if (showDialog.value == true){
+//        ShowDialogLearn(mutableStateOf(true))
+//    }
+@Composable
+fun ShowDialogL(show: MutableState<Boolean>)  {
+
+    AlertDialog(onDismissRequest = { show.value = false },
+        buttons = {
+            Row(
+                modifier = Modifier.padding(all = 8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+
+                Button(modifier = Modifier.fillMaxWidth(), onClick = { show.value = false }) {
+                    Icon(Icons.Filled.Check,contentDescription = "Next")
+                    showDialog.value = false
+                }
+            }
+
+        },
+        title = { Text(text = "Обучение") },
+        text = { Text(text = "Текст обучения") }
+    )
+
+
+}
+}
 //функция должна принимать имя и рейтинг для отображения fun postStructure(String Name, Int Rating){
 @Composable
 fun postStructure() {

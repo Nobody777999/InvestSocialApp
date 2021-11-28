@@ -10,6 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
@@ -25,19 +26,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.hfad.investsocialapp.R
 import com.hfad.investsocialapp.navigation.NavigationItem
 import java.time.LocalDate
 import java.util.*
 
 @ExperimentalComposeUiApi
 @Composable
-
+// функция создания новой записи на стену
 fun CreateNewRecordView(
     navController: NavController,
     createNewRecordViewModel: CreateNewRecordViewModel,
@@ -71,7 +74,7 @@ fun CreateNewRecordView(
     val categories = createNewRecordViewModel.categories
 
     fabAction.value = {
-        if (title.value.isNotEmpty() && text.value.isNotEmpty() && imageUri.value != null) {
+        if (title.value.isNotEmpty() && text.value.isNotEmpty()) {
             navController.popBackStack()
             createNewRecordViewModel.createRecord.value = true
         } else {
@@ -139,7 +142,7 @@ fun CreateNewRecordView(
 
 
 }
-
+// Прикрепить изображение при создании записи
 @Composable
 fun RequestContentPermission(imageUri: MutableState<Uri?>) {
 
@@ -185,7 +188,7 @@ fun RequestContentPermission(imageUri: MutableState<Uri?>) {
 
     }
 }
-
+// алерт, сообщение об ошибке ныне не используется
 @Composable
 fun ShowDialog(show: MutableState<Boolean>) {
     AlertDialog(onDismissRequest = { show.value = false },
@@ -201,9 +204,47 @@ fun ShowDialog(show: MutableState<Boolean>) {
             }
 
         },
-        title = { Text(text = "Ошибка") },
-        text = { Text(text = "Заполните все поля") }
-    )
+        title = { Text(text = "Обучение") },
+        text = {
+            LazyColumn {
 
+                    item {
+                        Text(
+                            text = stringResource(R.string.dialog)
+                        )
+                    }
+                item {
+                    Text(
+                        text = stringResource(R.string.dialog2)
+                    )
+                }
+                item {
+                    Text(
+                        text = stringResource(R.string.dialog3)
+                    )
+                }
+            }
+        })
 
 }
+//@Composable
+//fun ShowDialog(show: MutableState<Boolean>) {
+//    AlertDialog(onDismissRequest = { show.value = false },
+//        buttons = {
+//            Row(
+//                modifier = Modifier.padding(all = 8.dp),
+//                horizontalArrangement = Arrangement.Center
+//            ) {
+//
+//                Button(modifier = Modifier.fillMaxWidth(), onClick = { show.value = false }) {
+//                    Text(text = "Ок")
+//                }
+//            }
+//
+//        },
+//        title = { Text(text = "Ошибка") },
+//        text = { Text(text = "Заполните все поля") }
+//    )
+//
+//
+//}

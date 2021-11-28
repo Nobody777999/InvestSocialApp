@@ -27,11 +27,11 @@ class Gate {
     private val format = Json {
         ignoreUnknownKeys = true
     }
-
+    // объявление адреса и клиента
     private val url = "http://161.35.221.241"
     private val okHttpClient = OkHttpClient()
     private val mediaType = "application/json".toMediaType()
-
+    // функция авторизации по логину и паролю
     fun authorize(user: String, pass: String): LoginViewModel.State{
         val body = format.encodeToString(mapOf("username" to user, "password" to pass)).toRequestBody(mediaType)
 
@@ -61,7 +61,7 @@ class Gate {
             LoginViewModel.State.Error("Ошибка связи")
         }
     }
-
+    // функция создания нового пользователя по логину и паролю
     fun createNewUser(user: String, pass: String): LoginViewModel.State{
         val body = format.encodeToString(mapOf("username" to user, "password" to pass)).toRequestBody(mediaType)
 

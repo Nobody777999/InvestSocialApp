@@ -38,7 +38,7 @@ import com.hfad.investsocialapp.navigation.NavigationItem
 import com.hfad.investsocialapp.screen.profile.ProfileViewModel
 import com.hfad.investsocialapp.ui.theme.Purple500
 
-
+// параметры для поисковой строки
 @Composable
 fun HomeView(navController: NavController, homeViewModel: HomeViewModel, profileViewModel: ProfileViewModel) {
 
@@ -60,7 +60,7 @@ fun HomeView(navController: NavController, homeViewModel: HomeViewModel, profile
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-
+//Элементы ленты
         item {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
@@ -92,7 +92,7 @@ fun HomeView(navController: NavController, homeViewModel: HomeViewModel, profile
             }
 
         }
-
+        // Основная лента новостей
         homeViewModel.posts.forEach {
             item {
                 PostCard(post = it, viewModel = profileViewModel, progress = progress, navController = navController)

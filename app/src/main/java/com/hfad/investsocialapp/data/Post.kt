@@ -1,7 +1,7 @@
 package com.hfad.investsocialapp.data
 
 import kotlinx.serialization.Serializable
-
+// параметры для поста
 @Serializable
 data class Post(
     val id: String, val image: String,
