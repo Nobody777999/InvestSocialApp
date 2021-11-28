@@ -10,6 +10,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -43,6 +44,7 @@ import androidx.ui.input.ImeAction
 import coil.compose.rememberImagePainter
 import com.hfad.investsocialapp.R
 import com.hfad.investsocialapp.data.Profile
+import com.hfad.investsocialapp.navigation.NavigationItem
 import com.hfad.investsocialapp.screen.LoadingView
 import com.hfad.investsocialapp.screen.create_record.ShowDialog
 import com.hfad.investsocialapp.screen.home.HomeViewModel
@@ -210,7 +212,9 @@ fun ProfileCard(
                             post = it,
                             viewModel = profileViewModel,
                             progress = progress,
-                            navController = navController
+                            navController = navController,
+                            modifier = Modifier
+                                .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 8.dp)
                         )
                     }
 
@@ -225,11 +229,11 @@ fun ProfileCard(
 
     }
 
-    DisposableEffect(key1 = curProfile.value){
-
-        onDispose { profileViewModel.curProfile.value = false }
-
-    }
+//    DisposableEffect(key1 = curProfile.value){
+//
+//        onDispose { profileViewModel.curProfile.value = false }
+//
+//    }
 
     if (showDialog.value) {
         ShowDialog(show = showDialog)

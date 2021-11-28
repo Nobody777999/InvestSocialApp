@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -100,7 +101,7 @@ fun LoginSection(loginViewModel: LoginViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
+//        contentAlignment = Alignment.BottomCenter
     ) {
 //        Box(
 //            modifier = Modifier
@@ -112,6 +113,7 @@ fun LoginSection(loginViewModel: LoginViewModel) {
 //            Image(painterResource(R.drawable.logo), contentDescription = "logo")
 //
 //        }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -123,11 +125,7 @@ fun LoginSection(loginViewModel: LoginViewModel) {
                 .padding(10.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "logo",
-                alignment = Alignment.TopCenter
-            )
+
 
 
             Text(
@@ -181,6 +179,11 @@ fun LoginSection(loginViewModel: LoginViewModel) {
                     }
 
                 }
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "logo",
+                    alignment = BiasAlignment(0f, -1f),
+                )
             }
 
         }
