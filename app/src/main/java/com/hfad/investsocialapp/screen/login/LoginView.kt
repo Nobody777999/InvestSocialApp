@@ -1,5 +1,6 @@
 package com.hfad.investsocialapp.screen
 
+import android.widget.Toast
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -98,6 +100,7 @@ fun LoginSection(loginViewModel: LoginViewModel) {
     val user = loginViewModel.user.observeAsState()
     val password = loginViewModel.password.observeAsState()
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -174,7 +177,7 @@ fun LoginSection(loginViewModel: LoginViewModel) {
                         Text(text = "Войти")
                     }
                     Spacer(modifier = Modifier.padding(4.dp))
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = { Toast.makeText(context, "Добавление новых пользователей невозможно, зайдите под любым логином", Toast.LENGTH_SHORT).show() }) {
                         Text(text = "Регистрация")
                     }
 
