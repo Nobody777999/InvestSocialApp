@@ -41,7 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hfad.investsocialapp.screen.comments.CommentsView
+import com.hfad.investsocialapp.screen.comments.CommentsViewModel
 
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "Signal")
@@ -80,6 +82,7 @@ class MainActivity : ComponentActivity() {
         val homeViewModel: HomeViewModel by viewModels()
         val createRecordViewModel: CreateNewRecordViewModel by viewModels()
         val profileViewModel: ProfileViewModel by viewModels()
+        val commentsViewModel: CommentsViewModel by viewModels()
 
         loginViewModel.dataStore = applicationContext.dataStore
         homeViewModel.dataStore = applicationContext.dataStore
@@ -171,6 +174,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(NavigationItem.Profile.route) {
                         ProfileView(navController, profileViewModel, homeViewModel)
+                    }
+                    composable(NavigationItem.Comments.route){
+                        CommentsView(viewModel = commentsViewModel, navController = navController)
                     }
                 }
             }

@@ -160,7 +160,9 @@ fun PostCard(
                         .wrapContentWidth(Alignment.Start)
                 )
                 Button(
-                    onClick = { /*TODO*/ }, modifier = Modifier
+                    onClick =  {navController.navigate(NavigationItem.Comments.route){
+                        launchSingleTop = true
+                      }}, modifier = Modifier
                         .weight(1f)
                         .padding(start = 4.dp)
                         .wrapContentWidth(Alignment.End)
@@ -327,7 +329,9 @@ fun DraggableCard(
                             .wrapContentWidth(Alignment.Start)
                     )
                     Button(
-                        onClick = { /*TODO*/ }, modifier = Modifier
+                        onClick = {navController.navigate(NavigationItem.Comments.route){
+                            launchSingleTop = true
+                        } }, modifier = Modifier
                             .weight(1f)
                             .padding(start = 4.dp)
                             .wrapContentWidth(Alignment.End)

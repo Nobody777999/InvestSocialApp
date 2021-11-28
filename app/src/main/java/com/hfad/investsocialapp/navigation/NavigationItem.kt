@@ -6,4 +6,5 @@ sealed class NavigationItem(var route: String) {
     object Profile : NavigationItem("profile")
     object Login : NavigationItem("login")
     object CreateRecord : NavigationItem("createRecord")
+    object Comments: NavigationItem("comments")
 }
