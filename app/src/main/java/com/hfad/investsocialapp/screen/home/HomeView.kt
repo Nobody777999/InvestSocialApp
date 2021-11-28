@@ -99,6 +99,7 @@ fun HomeView(
                         .clickable(onClick = {
                             navController.navigate(NavigationItem.Profile.route) {
                                 profileViewModel.idUser.value = it.owner
+                                profileViewModel.curProfile.value = false
                                 launchSingleTop = true
                             }
                         })

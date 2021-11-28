@@ -134,7 +134,7 @@ fun ProfileCard(
         ) {
 
             Image(
-                rememberImagePainter(data = profile.avatar),
+                rememberImagePainter(data = if (curProfile.value!!) homeViewModel.imgProfilePath else profile.avatar),
                 contentDescription = "profile_photo",
                 modifier = Modifier
                     .padding(8.dp)
@@ -147,7 +147,7 @@ fun ProfileCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                text = profile.first_name + " " + profile.last_name,
+                text = if(curProfile.value!!) "Марина Нечаева" else (profile.first_name + " " + profile.last_name),
                 fontSize = 30.sp,
             )
         }
@@ -199,7 +199,7 @@ fun ProfileCard(
             LazyColumn {
                 item {
                     Text(
-                        text = "Посты пользователя",
+                        text = if (curProfile.value!!) "Мои посты" else "Посты пользователя",
                         fontSize = 30.sp,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
