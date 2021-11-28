@@ -9,8 +9,11 @@ import android.widget.ImageView
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
@@ -61,7 +64,7 @@ fun CreateNewRecordView(
     }
 
     if (showDialog.value) {
-        ShowDialog(show = showDialog)
+        ShowDialog2(show = showDialog)
     }
 
 
@@ -191,6 +194,89 @@ fun RequestContentPermission(imageUri: MutableState<Uri?>) {
 // алерт, сообщение об ошибке ныне не используется
 @Composable
 fun ShowDialog(show: MutableState<Boolean>) {
+    val page = remember {
+        mutableStateOf(1)
+    }
+    AlertDialog(onDismissRequest = { show.value = false },
+        buttons = {
+            Row(
+                modifier = Modifier.padding(all = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Button(modifier = Modifier, onClick = { show.value = false }) {
+                    Text(text = "Ок")
+                }
+                Spacer(modifier = Modifier.weight(1f))
+
+                if (page.value != 1) {
+                    Button(modifier = Modifier, onClick = {
+                        if (page.value == 3){
+                            page.value = 2
+                        } else if (page.value == 2){
+                            page.value = 1
+                        }
+                    }) {
+                        Text(text = "Назад")
+                    }
+                }
+                if (page.value != 3) {
+                    Spacer(modifier = Modifier.padding(4.dp))
+
+                    Button(modifier = Modifier, onClick = {
+                        if (page.value == 1){
+                            page.value = 2
+                        } else if (page.value == 2){
+                            page.value = 3
+                        }
+                    }) {
+                        Text(text = "Дальше")
+                    }
+                }
+
+            }
+
+        },
+        title = { Text(text = "Обучение") },
+        text = {
+            LazyColumn() {
+                item {
+                    when (page.value) {
+                        1 -> {
+                            Text(
+                                text = stringResource(R.string.dialog)
+                            )
+                        }
+                        2 -> {
+                            Text(
+                                text = stringResource(R.string.dialog2)
+                            )
+                            Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                        }
+                        3 -> {
+                            Text(
+                                text = stringResource(R.string.dialog3)
+                            )
+                            Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                        }
+                    }
+                }
+
+
+
+
+//                item {
+
+//                }
+//                item {
+
+//                }
+            }
+        })
+
+}
+@Composable
+fun ShowDialog2(show: MutableState<Boolean>) {
     AlertDialog(onDismissRequest = { show.value = false },
         buttons = {
             Row(
@@ -204,47 +290,9 @@ fun ShowDialog(show: MutableState<Boolean>) {
             }
 
         },
-        title = { Text(text = "Обучение") },
-        text = {
-            LazyColumn {
+        title = { Text(text = "Ошибка") },
+        text = { Text(text = "Заполните все поля") }
+    )
 
-                    item {
-                        Text(
-                            text = stringResource(R.string.dialog)
-                        )
-                    }
-                item {
-                    Text(
-                        text = stringResource(R.string.dialog2)
-                    )
-                }
-                item {
-                    Text(
-                        text = stringResource(R.string.dialog3)
-                    )
-                }
-            }
-        })
 
 }
-//@Composable
-//fun ShowDialog(show: MutableState<Boolean>) {
-//    AlertDialog(onDismissRequest = { show.value = false },
-//        buttons = {
-//            Row(
-//                modifier = Modifier.padding(all = 8.dp),
-//                horizontalArrangement = Arrangement.Center
-//            ) {
-//
-//                Button(modifier = Modifier.fillMaxWidth(), onClick = { show.value = false }) {
-//                    Text(text = "Ок")
-//                }
-//            }
-//
-//        },
-//        title = { Text(text = "Ошибка") },
-//        text = { Text(text = "Заполните все поля") }
-//    )
-//
-//
-//}
